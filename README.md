@@ -9,3 +9,7 @@ The main plan for this repo is as follows:
 - load the data from postgres database into pandas dataframe
 
 - clean the data
+
+
+# Resolved Issues
+[ModuleNotFound: '_lzma'](https://github.com/pandas-dev/pandas/issues/27532)

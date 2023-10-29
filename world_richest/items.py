@@ -6,7 +6,10 @@
 import scrapy
 
 
-class CrawlBillionairesItem(scrapy.Item):
+class WorldRichestItem(scrapy.Item):
     # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+    year:str = scrapy.Field()
+    name:str = scrapy.Field()
+    networth:str = scrapy.Field()
+    nationality:str = scrapy.Field()
+

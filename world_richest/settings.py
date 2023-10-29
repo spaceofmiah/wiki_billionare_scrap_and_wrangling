@@ -1,4 +1,4 @@
-# Scrapy settings for crawl_billionaires project
+# Scrapy settings for world_richest project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -7,14 +7,14 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = "crawl_billionaires"
+BOT_NAME = "world_richest"
 
-SPIDER_MODULES = ["crawl_billionaires.spiders"]
-NEWSPIDER_MODULE = "crawl_billionaires.spiders"
+SPIDER_MODULES = ["world_richest.spiders"]
+NEWSPIDER_MODULE = "world_richest.spiders"
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = "crawl_billionaires (+http://www.yourdomain.com)"
+#USER_AGENT = "world_richest (+http://www.yourdomain.com)"
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
@@ -45,13 +45,13 @@ ROBOTSTXT_OBEY = True
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    "crawl_billionaires.middlewares.CrawlBillionairesSpiderMiddleware": 543,
+#    "world_richest.middlewares.WorldRichestSpiderMiddleware": 543,
 #}
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
-#    "crawl_billionaires.middlewares.CrawlBillionairesDownloaderMiddleware": 543,
+#    "world_richest.middlewares.WorldRichestDownloaderMiddleware": 543,
 #}
 
 # Enable or disable extensions
@@ -63,7 +63,7 @@ ROBOTSTXT_OBEY = True
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 #ITEM_PIPELINES = {
-#    "crawl_billionaires.pipelines.CrawlBillionairesPipeline": 300,
+#    "world_richest.pipelines.WorldRichestPipeline": 300,
 #}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
