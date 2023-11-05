@@ -21,11 +21,13 @@ class BillionairesSpider(scrapy.Spider):
             # is not the kind of table targetted, we immeidately proceed to
             # the next table
             if len(header_rows) < 4:
+                logger.info(f"Skipping table {counter} because it has less than 4 columns {header_rows}")
                 continue
 
             year = years[counter]
             counter += 1
             table_body_rows = table.css("tbody").css("tr")
+            
             for table_body_row in table_body_rows:
                 row_data = table_body_row.css("td")
                 items = []
@@ -33,9 +35,11 @@ class BillionairesSpider(scrapy.Spider):
                     col_inner_text = col.css("::text").get()
                     items.append(col_inner_text)
 
-                if len(items) != 4:
+                if len(items) < 4:
+                    logger.info(f"Skipping row because it has less than 4 columns {items}")
                     continue
-
+                
+                
                 position = items[0]
                 name = items[1]
                 networth = items[2]
