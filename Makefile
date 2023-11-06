@@ -2,3 +2,9 @@
 # make spider=spider_name scrape 
 crawl:
 	poetry run scrapy crawl ${spider} -o ./output/${spider}.jsonl
+
+billions:
+	$(MAKE) crawl spider=billionaires
+
+nairarates:
+	poetry run scrapy crawl nairarate -a start_year=${start_year} -a end_year=${end_year} -o ./output/nairarate.jsonl
