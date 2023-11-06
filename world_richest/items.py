@@ -15,3 +15,8 @@ class WorldRichestItem(scrapy.Item):
     company:str = scrapy.Field()
     networth:str = scrapy.Field()
 
+
+class NairaRateItem(scrapy.Item):
+    buy_rate: str = scrapy.Field()
+    sell_rate: str = scrapy.Field()
+
