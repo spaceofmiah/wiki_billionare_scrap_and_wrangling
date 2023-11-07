@@ -6,5 +6,5 @@ crawl:
 billions:
 	$(MAKE) crawl spider=billionaires
 
-nairarates:
+nairarate:
 	poetry run scrapy crawl nairarate -a start_year=${start_year} -a end_year=${end_year} -o ./output/nairarate.jsonl

@@ -1,9 +1,9 @@
+import re
 import scrapy
 import calendar
 from arrow import Arrow
 from datetime import datetime
 from ..items import NairaRateItem
-from scrapy.utils.log import logger
 from scrapy.http import HtmlResponse
 
 
@@ -14,7 +14,7 @@ class NairaRateSpider(scrapy.Spider):
     def start_requests(self):
         self.routes = self.retrieve_next_route()
         yield scrapy.Request(next(self.routes), self.parse)
-    
+
     def get_day_suffix(self, day: int) -> str:
         """
         Returns the suffix for a given day.
@@ -27,21 +27,25 @@ class NairaRateSpider(scrapy.Spider):
     def retrieve_next_route(self):
         RESOURCE_START_YEAR = 2022
         # retrieve attributes passed by tags and set default if nothing is gotten
-        start_year:str = getattr(self, "start_year", datetime.now().year)
-        end_year:str = getattr(self, "end_year", datetime.now().year)
+        start_year: str = getattr(self, "start_year", datetime.now().year)
+        end_year: str = getattr(self, "end_year", datetime.now().year)
 
-        if not start_year.isdigit() and len(start_year) != 4: 
+        if not start_year.isdigit() and len(start_year) != 4:
             start_year = RESOURCE_START_YEAR
         else:
-            start_year = RESOURCE_START_YEAR if int(start_year) < 2022 else int(start_year)
-        
+            start_year = (
+                RESOURCE_START_YEAR if int(start_year) < 2022 else int(start_year)
+            )
+
         now = datetime.now()
 
-        if not end_year.isdigit() and len(end_year) != 4: 
+        if not end_year.isdigit() and len(end_year) != 4:
             end_year = now.year
         else:
-            end_year = datetime.now().year if int(end_year) > now.year else int(end_year)
-    
+            end_year = (
+                datetime.now().year if int(end_year) > now.year else int(end_year)
+            )
+
         # compute date for the passed year
         if start_year == RESOURCE_START_YEAR:
             # resource starts tracking from October 4th
@@ -50,10 +54,10 @@ class NairaRateSpider(scrapy.Spider):
         else:
             start_day = 1
             start_month = 1
-        
+
         if end_year == now.year:
             end_month = now.month
-            end_day = now.day   
+            end_day = now.day
         else:
             end_month = 12
             end_day = calendar.monthrange(year=start_year, month=1)[1]
@@ -65,13 +69,15 @@ class NairaRateSpider(scrapy.Spider):
         dates = Arrow.range(frame="days", start=start_date, end=end_date)
         for date in dates:
             numeric_date = date.strftime("%Y/%m/%d")
-            full_date = date.strftime(f"{date.day}{self.get_day_suffix(date.day)}-%B-%Y").lower()
+            full_date = date.strftime(
+                f"{date.day}{self.get_day_suffix(date.day)}-%B-%Y"
+            ).lower()
             yield f"https://www.naijanews.com/{numeric_date}/black-market-dollar-to-naira-exchange-rate-today-{full_date}/"
-    
-    @classmethod
-    def update_settings(cls, settings):
-        super().update_settings(settings)
-        settings.set("DOWNLOAD_DELAY", 2.5, priority="spider")
+
+    # @classmethod
+    # def update_settings(cls, settings):
+    #     super().update_settings(settings)
+    #     settings.set("DOWNLOAD_DELAY", 2.5, priority="spider")
 
     def parse(self, response: HtmlResponse):
         # Extraction -- Parse HTML
@@ -87,8 +93,13 @@ class NairaRateSpider(scrapy.Spider):
         # is the header of the table. Hence, we need to skip the first row
         table_body_rows = table.css("tbody").css("tr")[1:]
         data_items = table_body_rows.css("td::text").getall()
+        date = re.findall(r"\d+/\d+/\d+", response.url)[0]
 
         for route in self.routes:
             yield scrapy.Request(route, callback=self.parse)
 
-        yield NairaRateItem(buy_rate=data_items[1], sell_rate=data_items[-1])
+        yield NairaRateItem(
+            date=date,
+            buy_rate=data_items[1], 
+            sell_rate=data_items[-1],
+        )
